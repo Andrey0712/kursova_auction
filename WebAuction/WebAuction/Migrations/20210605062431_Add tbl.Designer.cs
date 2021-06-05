@@ -10,8 +10,8 @@ using WebAuction.Entities;
 namespace WebAuction.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20210604171735_add tbl")]
-    partial class addtbl
+    [Migration("20210605062431_Add tbl")]
+    partial class Addtbl
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

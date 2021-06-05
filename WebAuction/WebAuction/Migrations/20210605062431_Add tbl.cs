@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebAuction.Migrations
 {
-    public partial class addtbl : Migration
+    public partial class Addtbl : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

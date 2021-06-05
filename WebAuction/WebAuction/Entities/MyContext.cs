@@ -12,11 +12,16 @@ namespace WebAuction.Entities
         public DbSet<Lot> Lot { get; set; }
         public DbSet<UserLot> UserLot { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public MyContext(DbContextOptions<MyContext> options)
+            : base(options)
         {
-            //optionsBuilder.UseNpgsql("Server=95.214.10.36;Port=5432;Database=natadb;Username=natalia;Password=$544$B77w**G)K$t!Ube22}77b");
-            optionsBuilder.UseNpgsql("Server=91.238.103.134;Port=5623;Database=dbkondr;Username=andrey;Password=$5$BG)dfffhgjUbe}xk");
+
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+            
+        //    optionsBuilder.UseNpgsql("Server=91.238.103.134;Port=5623;Database=dbkondr;Username=andrey;Password=$5$BG)dfffhgjUbe}xk");
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
