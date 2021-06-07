@@ -5,8 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <DockPanel Margin="10" Background="#FFD6B2B2">
+        <StackPanel DockPanel.Dock="Right" Margin="10,0,0,0" Width="200">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Foreground" Value="Gold" />
+                    <Setter Property="BorderBrush" Value="Green" />
+                    <Setter Property="Background" Value="LightBlue" />
+                    <Setter Property="FontSize" Value="20" />
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="btnAdd" Content="Добавить" Click="btnAdd_Click"/>
+            <Button x:Name="btnDell" Content="Удалить" Margin="0,5" Click="btnDell_Click"/>
+            <Button x:Name="btnEdt" Content="Редактировать" Margin="0,5" Click="btnEdt_Click"/>
 
-    </Grid>
+        </StackPanel>
+        <DataGrid Name="dgSimple" AutoGenerateColumns="false" Grid.Column="0" Grid.Row="0" Background="Pink">
+            <DataGrid.Resources>
+                <Style TargetType="DataGrid">
+                    <Setter Property="Foreground" Value="Purple" />
+                    <Setter Property="BorderBrush" Value="DarkViolet" />
+                    <Setter Property="Background" Value="LightPink" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns >
+
+                <DataGridTextColumn Header="Номер лота" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Наименование лота" Binding="{Binding Name}"/>
+                
+
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate >
+                <DataTemplate>
+                    <DockPanel Background="YellowGreen">
+
+                        <Image DockPanel.Dock="Left" Source="{Binding Image}" Height="64" Margin="10" />
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Лот: " FontWeight="Bold" />
+                            <TextBlock Text="{Binding Name}" Grid.Column="1" />
+                            <TextBlock Text="Описание: " FontWeight="Bold"  Grid.Row="1" />
+                            <TextBlock Text="{Binding Description}" Grid.Column="1"  Grid.Row="1" />
+                            <TextBlock Text="Аукцион завершится: " FontWeight="Bold" Grid.Row="2" />
+                            <TextBlock Text="{Binding End}" Grid.Column="1"  Grid.Row="2" />
+                            <TextBlock Text="Стоимость: " FontWeight="Bold"  Grid.Row="3" />
+                            <TextBlock Text="{Binding Prise}" Grid.Column="1"  Grid.Row="3" />
+                            
+                        </Grid>
+
+                    </DockPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+    </DockPanel>
 </Window>

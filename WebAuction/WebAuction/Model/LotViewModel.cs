@@ -8,7 +8,7 @@ namespace WebAuction.Model
 {
     public class LotViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "Неуказано наименование лота")]
         public string Name { get; set; }
         /// <summary>
@@ -31,5 +31,6 @@ namespace WebAuction.Model
         /// </summary>
         [StringLength(255)]
         public string Image { get; set; }
+        public DateTime Begin { get; set; }
     }
 }

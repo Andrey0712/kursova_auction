@@ -65,7 +65,7 @@ namespace WpfClient
                 file_name = fileSave;
             }
 
-            WebRequest request = WebRequest.Create("http://localhost:5000/api/Lot/add");
+            WebRequest request = WebRequest.Create("http://localhost:1782/api/Lot/add");
             {
                 request.Method = "POST";
                 request.ContentType = "application/json";
