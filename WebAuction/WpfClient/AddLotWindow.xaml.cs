@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UiHelper;
 using WpfClient.Models;
 using Path = System.IO.Path;
 
@@ -51,32 +52,35 @@ namespace WpfClient
 
         public async Task<bool> PostRequest()
         {
-            if (!string.IsNullOrEmpty(file_selected))
-            {
+            //if (!string.IsNullOrEmpty(file_selected))
+            //{
 
-                var extension = Path.GetExtension(New_FileName);
-                var imageName = Path.GetRandomFileName() + extension;
-                var dir = Directory.GetCurrentDirectory();
-                var saveDir = Path.Combine(dir, "foto");
-                if (!Directory.Exists(saveDir))
-                    Directory.CreateDirectory(saveDir);
-                var fileSave = Path.Combine(saveDir, imageName);
-                File.Copy(New_FileName, fileSave);
-                file_name = fileSave;
-            }
+            //    var extension = Path.GetExtension(New_FileName);
+            //    var imageName = Path.GetRandomFileName() + extension;
+            //    var dir = Directory.GetCurrentDirectory();
+            //    var saveDir = Path.Combine(dir, "foto");
+            //    if (!Directory.Exists(saveDir))
+            //        Directory.CreateDirectory(saveDir);
+            //    var fileSave = Path.Combine(saveDir, imageName);
+            //    File.Copy(New_FileName, fileSave);
+            //    file_name = fileSave;
+            //}
 
+            
             WebRequest request = WebRequest.Create("http://localhost:1782/api/Lot/add");
             {
                 request.Method = "POST";
                 request.ContentType = "application/json";
             };
+            string base64 = ImageHelper.ImageConvertToBase64(New_FileName);
             string json = JsonConvert.SerializeObject(new
             {
                 Name = tbName.Text.ToString(),
                 End = int.Parse(tbEnd.Text),
                 Description = tbDescription.Text.ToString(),
                 Prise = int.Parse(tbPrise.Text),
-                Image = file_name
+                Image = base64
+                //Image= file_name
             });
             byte[] bytes = Encoding.UTF8.GetBytes(json);
 
@@ -94,13 +98,13 @@ namespace WpfClient
 
                 using WebResponse response = e.Response;
                 HttpWebResponse httpResponse = (HttpWebResponse)response;
-                MessageBox.Show("Error code: " + httpResponse.StatusCode);
+                //MessageBox.Show("Error code: " + httpResponse.StatusCode);
                 using Stream data = response.GetResponseStream();
                 using var reader = new StreamReader(data);
 
                 string text = reader.ReadToEnd();
                 var errors = JsonConvert.DeserializeObject<AddLotValid>(text);
-                MessageBox.Show(text);
+                //MessageBox.Show(text);
 
                 if (errors.Errors.Name != null)
                     lbName.Content = errors.Errors.Name[0].ToString();

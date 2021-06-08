@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAuction", "WebAuction\WebAuction.csproj", "{C5ADF36A-CBCF-4F72-910E-919A6B2578F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClient", "WpfClient\WpfClient.csproj", "{202B04BD-D7E2-4244-9CF0-E4BE0355941E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfClient", "WpfClient\WpfClient.csproj", "{202B04BD-D7E2-4244-9CF0-E4BE0355941E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UiHelper", "UiHelper\UiHelper.csproj", "{0710132C-D301-4EC2-B9FF-94BB16FE2121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{202B04BD-D7E2-4244-9CF0-E4BE0355941E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{202B04BD-D7E2-4244-9CF0-E4BE0355941E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{202B04BD-D7E2-4244-9CF0-E4BE0355941E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0710132C-D301-4EC2-B9FF-94BB16FE2121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0710132C-D301-4EC2-B9FF-94BB16FE2121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0710132C-D301-4EC2-B9FF-94BB16FE2121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0710132C-D301-4EC2-B9FF-94BB16FE2121}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

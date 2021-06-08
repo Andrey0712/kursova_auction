@@ -2,8 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using UiHelper;
 using WebAuction.Entities;
 using WebAuction.Model;
 
@@ -31,15 +35,22 @@ namespace WebAuction.Controllers
         [Route("add")]
         public IActionResult AddCar([FromBody] LotViewModel lot)
         {
+            var dir = Directory.GetCurrentDirectory();
+            var dirSave = Path.Combine(dir, "foto");
+            var imageName = Path.GetRandomFileName() + ".jpg";
+            var imageSaveFolder = Path.Combine(dirSave, imageName);
+            var image = lot.Image.LoadBase64();
+            image.Save(imageSaveFolder);
             var rez = new Lot
             {
                 Name = lot.Name,
                 Prise = lot.Prise,
+                //Image = image.ToString(),
                 Image = lot.Image,
                 End = DateTime.Now.AddDays(lot.End),
                 Description = lot.Description,
-                Begin=DateTime.Now
-                
+                Begin = DateTime.Now
+
 
             };
             _context.Lot.Add(rez);

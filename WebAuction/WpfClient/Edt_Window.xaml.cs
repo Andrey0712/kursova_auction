@@ -85,19 +85,27 @@ namespace WpfClient
 
             catch (WebException e)
             {
-                using (WebResponse response = e.Response)
-                {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-                    MessageBox.Show("Error code: " + httpResponse.StatusCode);
-                    using (Stream data = response.GetResponseStream())
-                    using (var reader = new StreamReader(data))
-                    {
-                        string text = reader.ReadToEnd();
-                        var errors = JsonConvert.DeserializeObject<AddLotValid>(text);
-                        MessageBox.Show(text);
-                        
-                    }
-                }
+                using WebResponse response = e.Response;
+                HttpWebResponse httpResponse = (HttpWebResponse)response;
+                //MessageBox.Show("Error code: " + httpResponse.StatusCode);
+                using Stream data = response.GetResponseStream();
+                using var reader = new StreamReader(data);
+
+                string text = reader.ReadToEnd();
+                var errors = JsonConvert.DeserializeObject<AddLotValid>(text);
+                //MessageBox.Show(text);
+
+                if (errors.Errors.Name != null)
+                    lbName.Content = errors.Errors.Name[0].ToString();
+
+                if (errors.Errors.Prise != null)
+                    lbPrise.Content = errors.Errors.Prise[0].ToString();
+
+                if (errors.Errors.End != null)
+                    lbEnd.Content = errors.Errors.End[0].ToString();
+
+                if (errors.Errors.Description != null)
+                    lbDescription.Content = errors.Errors.Description[0].ToString();
                 return false;
                 //using WebResponse response = e.Response;
                 //HttpWebResponse httpResponse = (HttpWebResponse)response;

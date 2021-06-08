@@ -30,7 +30,9 @@ namespace WpfClient
             InitializeComponent();
             using (WebClient webClient = new WebClient())
             {
-                webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
+                //var app = App.Current as IGetConfiguration;
+                //var serverUrl = app.Configuration.GetSection("ServerUrl").Value;
+                //webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
                 Uri uri = new Uri("http://localhost:1782/api/Lot/search");
                 webClient.DownloadDataAsync(uri);
             }

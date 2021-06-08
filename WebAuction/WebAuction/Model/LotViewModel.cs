@@ -29,7 +29,7 @@ namespace WebAuction.Model
         /// <summary>
         /// Описание
         /// </summary>
-        [StringLength(255)]
+        //[StringLength(255)]
         public string Image { get; set; }
         public DateTime Begin { get; set; }
     }
