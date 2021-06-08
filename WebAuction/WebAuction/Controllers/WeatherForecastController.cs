@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UiHelper.Constants;
 
 namespace WebAuction.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -23,7 +26,9 @@ namespace WebAuction.Controllers
             _logger = logger;
         }
 
+        
         [HttpGet]
+        [Authorize(Roles = Roles.Admin)]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

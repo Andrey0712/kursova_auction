@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UiHelper;
+using UiHelper.Constants;
 using WebAuction.Entities;
 using WebAuction.Model;
 
@@ -33,6 +35,7 @@ namespace WebAuction.Controllers
 
         [HttpPost]
         [Route("add")]
+        [Authorize(Roles = Roles.Admin)]
         public IActionResult AddCar([FromBody] LotViewModel lot)
         {
             var dir = Directory.GetCurrentDirectory();
@@ -59,6 +62,7 @@ namespace WebAuction.Controllers
 
         [HttpPut]
         [Route("edit")]
+        [Authorize(Roles = Roles.Admin)]
         public IActionResult Update([FromBody] LotViewModel lot)
         {
 
@@ -77,11 +81,12 @@ namespace WebAuction.Controllers
                 _context.SaveChanges();
             }
 
-            return Ok(new { result = $"Отредактированно автомобиль под ID № {lot.Id}" });
+            return Ok(new { result = $"Отредактированно лот под ID № {lot.Id}" });
         }
 
         [HttpDelete]
         [Route("del")]
+        [Authorize(Roles = Roles.Admin)]
         public IActionResult DeleteCar([FromBody] int id)
         {
             var del_car = _context.Lot.FirstOrDefault(x => x.Id == id);
