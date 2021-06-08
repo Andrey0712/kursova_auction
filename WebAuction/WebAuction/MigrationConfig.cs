@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UiHelper.Constants;
 using WebAuction.Entities;
+using WebGallery.Entities.Identity;
 
 namespace WebAuction
 {
@@ -14,15 +17,32 @@ namespace WebAuction
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                //var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-                //var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                 var context = serviceScope.ServiceProvider.GetRequiredService<MyContext>();
 
-                
-
-                if (!context.Lot.Any())
+                if (!roleManager.Roles.Any())
                 {
-                    var lots = new List<Lot>()
+                    var role = new AppRole
+                    {
+                        Name = Roles.Admin
+                    };
+                    var result = roleManager.CreateAsync(role).Result;
+                }
+                if (!userManager.Users.Any())
+                {
+                    var user = new AppUser
+                    {
+                        Email = "user@gmail.com",
+                        UserName = "user@gmail.com"
+                    };
+                    var result = userManager.CreateAsync(user, "qwerty").Result;
+
+                    result = userManager.AddToRoleAsync(user, Roles.Admin).Result;
+
+                    if (!context.Lot.Any())
+                    {
+                        var lots = new List<Lot>()
                     {
                         new Lot
                         {
@@ -31,7 +51,7 @@ namespace WebAuction
                             Description = "1 рубль 1870 г выпуска, в идеальном состоянии",
                             Begin=DateTime.Now,
                             End=DateTime.Now.AddDays(2),
-                            Image="1.jpg"
+                            Image="C:/kursova_auction/WebAuction/WebAuction/foto/1.jpg"
                         },
                         new Lot
                         {
@@ -40,7 +60,7 @@ namespace WebAuction
                             Description = "Копия картины Айвазовского 9-й вал",
                             Begin=DateTime.Now,
                             End=DateTime.Now.AddDays(3),
-                            Image="Ayvazobsky.jpg"
+                            Image="C:/kursova_auction/WebAuction/WebAuction/foto/Ayvazobsky.jpg"
                         },
                         new Lot
                         {
@@ -49,63 +69,59 @@ namespace WebAuction
                             Description = "Серебряный кубок, 18 век",
                             Begin=DateTime.Now,
                             End=DateTime.Now.AddDays(5),
-                            Image="Cup.jpg"
+                            Image="C:/kursova_auction/WebAuction/WebAuction/foto/Cup.jpg"
                         }
                     };
-                    context.Lot.AddRange(lots);
-                    context.SaveChanges();
-                }
-                if (context.Users.Count() == 0)
-                {
-                    context.Users
-                        .Add(new User
-                        {
-                            Name = "Василиса",
-                            Surname = "Зуева",
-                            Login = "Шопоголик",
-                            Password="шоп1"
-                        });
-                    context.Users
-                        .Add(new User
-                        {
-                            Name = "Кличко",
-                            Surname = "Виталик",
-                            Login = "Бокс",
-                            Password = "шоп2"
-                        });
+                        context.Lot.AddRange(lots);
+                        context.SaveChanges();
+                    }
+                    //if (context.Users.Count() == 0)
+                    //{
+                    //    context.Users
+                    //        .Add(new User
+                    //        {
+                    //            Name = "Василиса",
+                    //            Surname = "Зуева",
+                    //            Login = "Шопоголик",
+                    //            Password="шоп1"
+                    //        });
+                    //    context.Users
+                    //        .Add(new User
+                    //        {
+                    //            Name = "Кличко",
+                    //            Surname = "Виталик",
+                    //            Login = "Бокс",
+                    //            Password = "шоп2"
+                    //        });
 
-                    context.SaveChanges();
-                }
-                if (context.UserLot.Count() == 0)
-                {
-                    context.UserLot
-                        .Add(new UserLot
-                        {
-                            UserId = 1,
-                            LotId = 1,
-                        });
-                    context.UserLot
-                        .Add(new UserLot
-                        {
-                            UserId = 1,
-                            LotId = 3,
-                        });
-                    context.UserLot
-                        .Add(new UserLot
-                        {
-                            UserId = 2,
-                            LotId = 2,
-                        });
-                    context.UserLot
-                        .Add(new UserLot
-                        {
-                            UserId = 2,
-                            LotId = 3,
-                        });
+                    //    context.SaveChanges();
+                    //}
+                    if (context.UserLot.Count() == 0)
+                    {
+                        context.UserLot
+                            .Add(new UserLot
+                            {
+                                UserId = 1,
+                                LotId = 1,
+                            });
+                        context.UserLot
+                            .Add(new UserLot
+                            {
+                                UserId = 1,
+                                LotId = 3,
+                            });
+                        context.UserLot
+                            .Add(new UserLot
+                            {
+                                UserId = 1,
+                                LotId = 2,
+                            });
 
-                    context.SaveChanges();
-                }
 
+                        context.SaveChanges();
+                    }
+
+                }
             }
         }
     }

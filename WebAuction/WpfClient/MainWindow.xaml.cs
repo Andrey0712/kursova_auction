@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UiHelper.Constants;
 using WpfClient.Models;
 
 namespace WpfClient
@@ -32,8 +33,8 @@ namespace WpfClient
             {
                 //var app = App.Current as IGetConfiguration;
                 //var serverUrl = app.Configuration.GetSection("ServerUrl").Value;
-                //webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
-                Uri uri = new Uri("http://localhost:1782/api/Lot/search");
+                webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
+                Uri uri = new Uri(UriConstant.Get);
                 webClient.DownloadDataAsync(uri);
             }
         }
@@ -76,7 +77,7 @@ namespace WpfClient
                 {
                     LotVM_Client model = dgSimple.SelectedItem as LotVM_Client;
                     //  Ініціалізація обєкта, який відправлятиме запит на веб-сервіс
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.CreateHttp($"http://localhost:1782/api/Lot/del");
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.CreateHttp(UriConstant.Del);
                     //  Встановлення методу відправки данних
                     request.Method = "DELETE";
                     //  Встановлення типу відправки данних

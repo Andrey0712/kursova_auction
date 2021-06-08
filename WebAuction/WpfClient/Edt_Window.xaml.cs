@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UiHelper.Constants;
 using WpfClient.Models;
 
 namespace WpfClient
@@ -52,7 +53,7 @@ namespace WpfClient
             }
             
             // отправляем запрос по вебу
-            WebRequest request = WebRequest.Create("http://localhost:1782/api/Lot/edit");
+            WebRequest request = WebRequest.Create(UriConstant.Edit);
             // метод
             request.Method = "PUT";
 

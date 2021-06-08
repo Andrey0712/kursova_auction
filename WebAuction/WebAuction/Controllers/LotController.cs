@@ -45,8 +45,7 @@ namespace WebAuction.Controllers
             {
                 Name = lot.Name,
                 Prise = lot.Prise,
-                //Image = image.ToString(),
-                Image = lot.Image,
+                Image = imageSaveFolder,
                 End = DateTime.Now.AddDays(lot.End),
                 Description = lot.Description,
                 Begin = DateTime.Now

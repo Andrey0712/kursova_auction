@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UiHelper;
+using UiHelper.Constants;
 using WpfClient.Models;
 using Path = System.IO.Path;
 
@@ -67,7 +68,7 @@ namespace WpfClient
             //}
 
             
-            WebRequest request = WebRequest.Create("http://localhost:1782/api/Lot/add");
+            WebRequest request = WebRequest.Create(UriConstant.Add);
             {
                 request.Method = "POST";
                 request.ContentType = "application/json";
@@ -126,7 +127,7 @@ namespace WpfClient
                 MessageBox.Show(ex.Message.ToString());
                 return false;
             }
-
+            
         }
     }
 }
