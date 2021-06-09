@@ -36,6 +36,11 @@
             <Button x:Name="btnAdd" Content="Добавить" Margin="0,5" Click="btnAdd_Click"/>
             <Button x:Name="btnDell" Content="Удалить" Margin="0,5" Click="btnDell_Click"/>
             <Button x:Name="btnEdt" Content="Редактировать" Margin="0,5" Click="btnEdt_Click"/>
+            <WrapPanel>
+                <Label Content="         Укажите ставку " HorizontalAlignment="Left"/>
+                <TextBox x:Name="tbNewPrise" Width="50"/>
+                
+            </WrapPanel>
             <Button x:Name="btnRate" Content="Ставка" Margin="0,5" Click="btnRate_Click"/>
             <Button x:Name="btnUpdate" Content="Обновить" Margin="0,5" Click="btnUpdate_Click" />
 

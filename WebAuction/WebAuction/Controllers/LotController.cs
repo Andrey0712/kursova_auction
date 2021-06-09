@@ -102,5 +102,25 @@ namespace WebAuction.Controllers
 
 
         }
+        [HttpPut]
+        [Route("rate")]
+        [Authorize(Roles = Roles.Admin)]
+        public IActionResult UpRate([FromBody] LotViewModelRate lot)
+        {
+
+
+            var res = _context.Lot.FirstOrDefault(x => x.Id == lot.Id);
+
+            if (res != null)
+            {
+                res.Id = lot.Id;
+                
+                res.Prise = lot.Prise;
+                
+                _context.SaveChanges();
+            }
+
+            return Ok(new { result = $"Отредактированно лот под ID № {lot.Id}" });
+        }
     }
 }

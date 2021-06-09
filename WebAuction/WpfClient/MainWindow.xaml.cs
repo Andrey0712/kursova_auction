@@ -33,8 +33,7 @@ namespace WpfClient
             InitializeComponent();
             using (WebClient webClient = new WebClient())
             {
-                //var app = App.Current as IGetConfiguration;
-                //var serverUrl = app.Configuration.GetSection("ServerUrl").Value;
+                
                 webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
                 Uri uri = new Uri(UriConstant.Get);
                 webClient.DownloadDataAsync(uri);
@@ -83,10 +82,10 @@ namespace WpfClient
                         request.ContentType = "application/json";
                     request.PreAuthenticate = true;//тест при авторизации
                     request.Headers.Add("Authorization", $"Bearer {token}");
-                    
+
                     using (StreamWriter sw = new StreamWriter(request.GetRequestStream()))
                     {
-                        
+
                         sw.Write(JsonConvert.SerializeObject(model.Id));
                     }
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -154,7 +153,7 @@ namespace WpfClient
                         {
                            var tok = JsonConvert.DeserializeObject<Get_Token>(stream.ReadToEnd());
                              token = tok.Token;
-                             //MessageBox.Show(token);
+                             MessageBox.Show("Авторизация прошла успешно");
                              return;
                         }
                     }
@@ -165,9 +164,58 @@ namespace WpfClient
             }
         }
 
-        private void btnRate_Click(object sender, RoutedEventArgs e)
+        private async void btnRate_Click(object sender, RoutedEventArgs e)
         {
+            // _=Rate();
+            await Task.Run(() =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    LotVM_Client model = dgSimple.SelectedItem as LotVM_Client;
 
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.CreateHttp(UriConstant.Rate);
+                    request.Method = "PUT";
+                    request.ContentType = "application/json";
+                    request.PreAuthenticate = true;//тест при авторизации
+                    request.Headers.Add("Authorization", $"Bearer {token}");
+                    string json = JsonConvert.SerializeObject(new
+                    {
+                        Id = model.Id,
+                        Prise = int.Parse(tbNewPrise.Text)
+
+
+                    });
+                    if(int.Parse(tbNewPrise.Text) > model.Prise)
+                    {
+                      byte[] byteArray = Encoding.UTF8.GetBytes(json);
+
+                        using (Stream stream = request.GetRequestStream())
+                    {
+                        stream.Write(byteArray, 0, byteArray.Length);
+                    }
+
+
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                    {
+                        var result = sr.ReadToEnd();
+                    }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ваша ставка не принята.");
+                    }
+
+                    Dispatcher.Invoke(async () =>
+                    {
+                        List<LotVM_Client> lot = new List<LotVM_Client>();
+                        lot.AddRange(await GetLots());
+                        dgSimple.ItemsSource = lot;
+                    });
+
+                });
+            });
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
@@ -177,6 +225,81 @@ namespace WpfClient
                 webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
                 Uri uri = new Uri(UriConstant.Get);
                 webClient.DownloadDataAsync(uri);
+            }
+
+        }
+
+        public async Task<bool> Rate()
+        {
+            //if (!string.IsNullOrEmpty(New_FileName))
+            //{
+            //    var extension = System.IO.Path.GetExtension(New_FileName);
+            //    var imageName = System.IO.Path.GetRandomFileName() + extension;
+            //    var dir = Directory.GetCurrentDirectory();
+            //    var saveDir = System.IO.Path.Combine(dir, "foto");
+            //    if (!Directory.Exists(saveDir))
+            //        Directory.CreateDirectory(saveDir);
+
+            //    var fileSave = System.IO.Path.Combine(saveDir, imageName);
+            //    File.Copy(New_FileName, fileSave);
+            //    foto = fileSave;
+            //}
+            LotVM_Client model = dgSimple.SelectedItem as LotVM_Client;
+            // отправляем запрос по вебу
+            WebRequest request = WebRequest.Create(UriConstant.Rate);
+            // метод
+            request.Method = "PUT";
+
+            // тип даных
+            request.ContentType = "application/json";
+            request.PreAuthenticate = true;//тест при авторизации
+            request.Headers.Add("Authorization", $"Bearer {MainWindow.token}");
+            // формируется запрос и отправляються в масив с кодировкой
+            
+            string json = JsonConvert.SerializeObject(new
+            {
+                //Id = model.Id,
+                Id = model.Id,
+                //Name = model.Name,
+                //End = model.End,
+                //Description = model.Description,
+                Prise = int.Parse(tbNewPrise.Text),
+                //Image=model.Image
+                
+
+            });
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(json);
+
+            using (Stream stream = await request.GetRequestStreamAsync())
+            {
+                stream.Write(byteArray, 0, byteArray.Length);
+            }
+            try
+            {
+                await request.GetResponseAsync();
+                return true;
+            }
+
+            catch (WebException e)
+            {
+                using WebResponse response = e.Response;
+                HttpWebResponse httpResponse = (HttpWebResponse)response;
+                //MessageBox.Show("Error code: " + httpResponse.StatusCode);
+                using Stream data = response.GetResponseStream();
+                using var reader = new StreamReader(data);
+
+                string text = reader.ReadToEnd();
+                var errors = JsonConvert.DeserializeObject<AddLotValid>(text);
+                //MessageBox.Show(text);
+
+               
+                return false;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message); return false;
             }
 
         }

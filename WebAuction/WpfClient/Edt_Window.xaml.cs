@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UiHelper;
 using UiHelper.Constants;
 using WpfClient.Models;
 
@@ -35,22 +36,23 @@ namespace WpfClient
         private void btnSaveChangs_Click(object sender, RoutedEventArgs e)
         {
             _ = Edit();
+            Close();
         }
         public async Task<bool> Edit()
         {
-            if (!string.IsNullOrEmpty(New_FileName))
-            {
-                var extension = System.IO.Path.GetExtension(New_FileName);
-                var imageName = System.IO.Path.GetRandomFileName() + extension;
-                var dir = Directory.GetCurrentDirectory();
-                var saveDir = System.IO.Path.Combine(dir, "foto");
-                if (!Directory.Exists(saveDir))
-                    Directory.CreateDirectory(saveDir);
+            //if (!string.IsNullOrEmpty(New_FileName))
+            //{
+            //    var extension = System.IO.Path.GetExtension(New_FileName);
+            //    var imageName = System.IO.Path.GetRandomFileName() + extension;
+            //    var dir = Directory.GetCurrentDirectory();
+            //    var saveDir = System.IO.Path.Combine(dir, "foto");
+            //    if (!Directory.Exists(saveDir))
+            //        Directory.CreateDirectory(saveDir);
 
-                var fileSave = System.IO.Path.Combine(saveDir, imageName);
-                File.Copy(New_FileName, fileSave);
-                foto = fileSave;
-            }
+            //    var fileSave = System.IO.Path.Combine(saveDir, imageName);
+            //    File.Copy(New_FileName, fileSave);
+            //    foto = fileSave;
+            //}
             
             // отправляем запрос по вебу
             WebRequest request = WebRequest.Create(UriConstant.Edit);
@@ -62,7 +64,7 @@ namespace WpfClient
             request.PreAuthenticate = true;//тест при авторизации
             request.Headers.Add("Authorization", $"Bearer {MainWindow.token}");
             // формируется запрос и отправляються в масив с кодировкой
-
+            string base64 = ImageHelper.ImageConvertToBase64(New_FileName);
             string json = JsonConvert.SerializeObject(new
             {
                 Id = _id,

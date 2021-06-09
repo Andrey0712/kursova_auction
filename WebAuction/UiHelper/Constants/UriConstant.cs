@@ -11,6 +11,7 @@ namespace UiHelper.Constants
         public static string Add = "http://localhost:1782/api/Lot/add";
         public static string Edit = "http://localhost:1782/api/Lot/edit";
         public static string Del = "http://localhost:1782/api/Lot/del";
+        public static string Rate = "http://localhost:1782/api/Lot/rate";
         public static string Account = "http://localhost:1782/api/Account";
     }
 }
