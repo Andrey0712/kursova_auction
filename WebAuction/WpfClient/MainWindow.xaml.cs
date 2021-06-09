@@ -26,6 +26,8 @@ namespace WpfClient
     public partial class MainWindow : Window
     {
         public int id { get; set; }
+
+        public static string token;
         public MainWindow()
         {
             InitializeComponent();
@@ -69,41 +71,36 @@ namespace WpfClient
         }
        private async  void btnDell_Click(object sender, RoutedEventArgs e)
         {
-            //await Task.Run(() => Dell_Carr());
-
+           
             await Task.Run(() =>
             {
                 Dispatcher.Invoke(() =>
                 {
                     LotVM_Client model = dgSimple.SelectedItem as LotVM_Client;
-                    //  Ініціалізація обєкта, який відправлятиме запит на веб-сервіс
+                    
                     HttpWebRequest request = (HttpWebRequest)WebRequest.CreateHttp(UriConstant.Del);
-                    //  Встановлення методу відправки данних
-                    request.Method = "DELETE";
-                    //  Встановлення типу відправки данних
-                    request.ContentType = "application/json";
-                    //  Ініціалізація обєкту, який відправляє дані на веб-сервіс
+                        request.Method = "DELETE";
+                        request.ContentType = "application/json";
+                    request.PreAuthenticate = true;//тест при авторизации
+                    request.Headers.Add("Authorization", $"Bearer {token}");
+                    
                     using (StreamWriter sw = new StreamWriter(request.GetRequestStream()))
                     {
-                        //  Відправка данних
+                        
                         sw.Write(JsonConvert.SerializeObject(model.Id));
                     }
-                    //  Отримання результату запиту
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    //  Зчитування результату запиту
+                    
                     using (StreamReader sr = new StreamReader(response.GetResponseStream()))
                     {
                         var result = sr.ReadToEnd();
                     }
 
-                    //Переініціалізація ДатаГріда
                     Dispatcher.Invoke(async () =>
                     {
-                        List<LotVM_Client> cars = new List<LotVM_Client>();
-                        //cars.AddRange(models.Where(x => x.IsNew).ToList());
-                        cars.AddRange(await GetCars());
-                        //models = cars;
-                        this.dgSimple.ItemsSource = cars;
+                        List<LotVM_Client> lot = new List<LotVM_Client>();
+                        lot.AddRange(await GetLots());
+                        dgSimple.ItemsSource = lot;
                     });
 
                 });
@@ -111,27 +108,77 @@ namespace WpfClient
 
         }
        
-        private async Task<List<LotVM_Client>> GetCars()
+        private async Task<List<LotVM_Client>> GetLots()
         {
             //  Отримання данних з БД
             return await Task.Run(() => {
                 try
                 {
-
-                    //  Формування нової колекції яка повертатиметься
-                    List<LotVM_Client> models_ = new List<LotVM_Client>();
-                    //  Створення обєкта WebClient, який отримує запити з веб-сервісу
-                    WebClient client = new WebClient();
-                    //  Десеріалізація з формата json у тип List<CarModel>
-                    models_ = JsonConvert.DeserializeObject<List<LotVM_Client>>(client.DownloadString("http://localhost:1782/api/Lot/search"));
-                    //  Повернення колекції
-                    return models_;
+                    List<LotVM_Client> getLot = new List<LotVM_Client>();
+                       WebClient client = new WebClient();
+                    getLot = JsonConvert.DeserializeObject<List<LotVM_Client>>(client.DownloadString(UriConstant.Get));
+                             return getLot;
                 }
                 catch
                 {
                     return null;
                 }
             });
+        }
+
+
+
+
+        private  void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.CreateHttp(UriConstant.Account);
+                      request.Method = "POST";
+                          request.ContentType = "application/json";
+                    
+                    string json = JsonConvert.SerializeObject(new
+                    {
+                        Email = tbUser.Text,
+                        Password = tbPassword.Text
+                    });
+                    byte[] bytes = Encoding.UTF8.GetBytes(json);
+
+                    using (Stream stream = request.GetRequestStreamAsync().Result)
+                    {
+                        stream.Write(bytes, 0, bytes.Length);
+                    }
+                    try
+                    {
+                        var response = request.GetResponseAsync().Result;
+                        using (var stream = new StreamReader(response.GetResponseStream()))
+                        {
+                           var tok = JsonConvert.DeserializeObject<Get_Token>(stream.ReadToEnd());
+                             token = tok.Token;
+                             //MessageBox.Show(token);
+                             return;
+                        }
+                    }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+
+            }
+        }
+
+        private void btnRate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                webClient.DownloadDataCompleted += AsyncDownloadDataCompleted;
+                Uri uri = new Uri(UriConstant.Get);
+                webClient.DownloadDataAsync(uri);
+            }
+
         }
     }
 }

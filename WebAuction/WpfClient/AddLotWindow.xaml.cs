@@ -72,6 +72,9 @@ namespace WpfClient
             {
                 request.Method = "POST";
                 request.ContentType = "application/json";
+                request.PreAuthenticate = true;//тест при авторизации
+                request.Headers.Add("Authorization", $"Bearer {MainWindow.token}");
+                
             };
             string base64 = ImageHelper.ImageConvertToBase64(New_FileName);
             string json = JsonConvert.SerializeObject(new

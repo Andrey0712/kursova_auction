@@ -16,9 +16,28 @@
                     <Setter Property="FontSize" Value="20" />
                 </Style>
             </StackPanel.Resources>
-            <Button x:Name="btnAdd" Content="Добавить" Click="btnAdd_Click"/>
+            <Label Content="     Введите E-mail юзера :" 
+                       HorizontalAlignment="Left" 
+                       Height="25" 
+                       Width="194" />
+
+            <TextBox x:Name="tbUser" Margin="0,5"
+                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Width="150"/>
+            <Label Content="     Введите пароль :" 
+                       HorizontalAlignment="Left" 
+                       Height="25" 
+                       Width="194" />
+
+            <TextBox x:Name="tbPassword" Margin="0,5"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    Width="150"/>
+            <Button x:Name="btnLogin" Content="Авторизация" Margin="0,5" Click="btnLogin_Click"/>
+            <Button x:Name="btnAdd" Content="Добавить" Margin="0,5" Click="btnAdd_Click"/>
             <Button x:Name="btnDell" Content="Удалить" Margin="0,5" Click="btnDell_Click"/>
             <Button x:Name="btnEdt" Content="Редактировать" Margin="0,5" Click="btnEdt_Click"/>
+            <Button x:Name="btnRate" Content="Ставка" Margin="0,5" Click="btnRate_Click"/>
+            <Button x:Name="btnUpdate" Content="Обновить" Margin="0,5" Click="btnUpdate_Click" />
 
         </StackPanel>
         <DataGrid Name="dgSimple" AutoGenerateColumns="false" Grid.Column="0" Grid.Row="0" Background="Pink">
@@ -34,7 +53,7 @@
 
                 <DataGridTextColumn Header="Номер лота" Binding="{Binding Id}" />
                 <DataGridTextColumn Header="Наименование лота" Binding="{Binding Name}"/>
-                
+
 
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate >
@@ -64,7 +83,7 @@
                             <TextBlock Text="{Binding End}" Grid.Column="1"  Grid.Row="2" />
                             <TextBlock Text="Стоимость: " FontWeight="Bold"  Grid.Row="3" />
                             <TextBlock Text="{Binding Prise}" Grid.Column="1"  Grid.Row="3" />
-                            
+
                         </Grid>
 
                     </DockPanel>
