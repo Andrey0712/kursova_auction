@@ -33,11 +33,21 @@ namespace WpfClient
             InitializeComponent();
             _id = id;
         }
+        private void btnSelectImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                New_FileName = openFileDialog.FileName;
+            }
+        }
         private void btnSaveChangs_Click(object sender, RoutedEventArgs e)
         {
             _ = Edit();
-            Close();
+            //Close();
         }
+        
         public async Task<bool> Edit()
         {
             //if (!string.IsNullOrEmpty(New_FileName))
@@ -72,7 +82,7 @@ namespace WpfClient
                 End = int.Parse(tbEnd.Text),
                 Description = tbDescription.Text.ToString(),
                 Prise = int.Parse(tbPrise.Text),
-                Image = foto
+                Image = base64
 
             });
 
@@ -121,14 +131,6 @@ namespace WpfClient
 
         }
 
-        private void btnSelectImage_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                New_FileName = openFileDialog.FileName;
-            }
-        }
+        
     }
 }

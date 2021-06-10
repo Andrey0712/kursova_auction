@@ -31,6 +31,7 @@ namespace WpfClient
         public MainWindow()
         {
             InitializeComponent();
+            
             using (WebClient webClient = new WebClient())
             {
                 

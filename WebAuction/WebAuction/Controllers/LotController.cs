@@ -68,13 +68,18 @@ namespace WebAuction.Controllers
 
 
             var res = _context.Lot.FirstOrDefault(x => x.Id == lot.Id);
-
+            var dir = Directory.GetCurrentDirectory();
+            var dirSave = Path.Combine(dir, "foto");
+            var imageName = Path.GetRandomFileName() + ".jpg";
+            var imageSaveFolder = Path.Combine(dirSave, imageName);
+            var image = lot.Image.LoadBase64();
+            image.Save(imageSaveFolder);
             if (res != null)
             {
                 res.Id = lot.Id;
                 res.Name = lot.Name;
                 res.Prise = lot.Prise;
-                res.Image = lot.Image;
+                res.Image = imageSaveFolder;
                 res.Description = lot.Description;
                 res.End = DateTime.Now.AddDays(lot.End);
                

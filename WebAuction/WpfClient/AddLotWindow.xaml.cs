@@ -48,7 +48,8 @@ namespace WpfClient
         private void btnSaveChangs_Click(object sender, RoutedEventArgs e)
         {
             _ = PostRequest();
-            Close();
+            
+            //Close();
         }
 
         public async Task<bool> PostRequest()
