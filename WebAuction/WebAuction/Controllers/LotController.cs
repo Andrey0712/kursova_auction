@@ -119,7 +119,7 @@ namespace WebAuction.Controllers
             if (res != null)
             {
                 res.Id = lot.Id;
-                
+                res.Description = lot.Description;
                 res.Prise = lot.Prise;
                 
                 _context.SaveChanges();
@@ -127,5 +127,25 @@ namespace WebAuction.Controllers
 
             return Ok(new { result = $"Отредактированно лот под ID № {lot.Id}" });
         }
+        //[HttpPut]
+        //[Route("deactivate")]
+        //[Authorize(Roles = Roles.Admin)]
+        //public IActionResult deactivate([FromBody] LotViewModelRate lot)
+        //{
+
+
+        //    var res = _context.Lot.FirstOrDefault(x => x.Id == lot.Id);
+
+        //    if (res != null)
+        //    {
+        //        res.Id = lot.Id;
+
+        //        res.Description = lot.Description;
+
+        //        _context.SaveChanges();
+        //    }
+
+        //    return Ok(new { result = $"Отредактированно лот под ID № {lot.Id}" });
+        //}
     }
 }

@@ -27,7 +27,9 @@ namespace WpfClient
     {
         public int id { get; set; }
 
+        private const string V = "YellowGreen";
         public static string token;
+        public static string actual="Актуально";
         public MainWindow()
         {
             InitializeComponent();
@@ -182,11 +184,14 @@ namespace WpfClient
                     string json = JsonConvert.SerializeObject(new
                     {
                         Id = model.Id,
-                        Prise = int.Parse(tbNewPrise.Text)
+                        Prise = int.Parse(tbNewPrise.Text),
+                        Description=model.Description
 
 
                     });
-                    if(int.Parse(tbNewPrise.Text) > model.Prise)
+                if (model.End > DateTime.Now)
+                {
+                    if (int.Parse(tbNewPrise.Text) > model.Prise)
                     {
                       byte[] byteArray = Encoding.UTF8.GetBytes(json);
 
@@ -207,6 +212,34 @@ namespace WpfClient
                     {
                         MessageBox.Show("Ваша ставка не принята.");
                     }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Лот деактивирован.");
+                       
+                        string json1 = JsonConvert.SerializeObject(new
+                        {
+                            Id = model.Id,
+                            Description = "Не актуально",
+                            Prise=model.Prise
+
+                        });
+                        byte[] byteArray = Encoding.UTF8.GetBytes(json1);
+
+                        using (Stream stream = request.GetRequestStream())
+                        {
+                            stream.Write(byteArray, 0, byteArray.Length);
+                        }
+
+
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                        {
+                            var result = sr.ReadToEnd();
+                        }
+                    }
+
 
                     Dispatcher.Invoke(async () =>
                     {

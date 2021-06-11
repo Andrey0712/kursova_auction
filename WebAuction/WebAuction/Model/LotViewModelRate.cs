@@ -9,5 +9,7 @@ namespace WebAuction.Model
     {
         public int Id { get; set; }
         public int Prise { get; set; }
+        public string Description { get; set; }
+
     }
 }

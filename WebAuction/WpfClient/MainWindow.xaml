@@ -58,6 +58,7 @@
 
                 <DataGridTextColumn Header="Номер лота" Binding="{Binding Id}" />
                 <DataGridTextColumn Header="Наименование лота" Binding="{Binding Name}"/>
+                
 
 
             </DataGrid.Columns>
