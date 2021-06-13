@@ -44,15 +44,22 @@ namespace WebAuction.Controllers
             var imageSaveFolder = Path.Combine(dirSave, imageName);
             var image = lot.Image.LoadBase64();
             image.Save(imageSaveFolder);
+
+            var shema = Request.Scheme;
+            var port = Request.Host.Port;
+            var domain = Request.Host.Host;
+            if (port != null)
+                domain += ":" + port.ToString();
+            string url = $"{shema}://{domain}/img/{imageName}";
             var rez = new Lot
             {
                 Name = lot.Name,
                 Prise = lot.Prise,
-                Image = imageSaveFolder,
+                //Image = imageSaveFolder,
                 End = DateTime.Now.AddDays(lot.End),
                 Description = lot.Description,
-                Begin = DateTime.Now
-
+                Begin = DateTime.Now,
+                Image = url
 
             };
             _context.Lot.Add(rez);
@@ -127,25 +134,6 @@ namespace WebAuction.Controllers
 
             return Ok(new { result = $"Отредактированно лот под ID № {lot.Id}" });
         }
-        //[HttpPut]
-        //[Route("deactivate")]
-        //[Authorize(Roles = Roles.Admin)]
-        //public IActionResult deactivate([FromBody] LotViewModelRate lot)
-        //{
-
-
-        //    var res = _context.Lot.FirstOrDefault(x => x.Id == lot.Id);
-
-        //    if (res != null)
-        //    {
-        //        res.Id = lot.Id;
-
-        //        res.Description = lot.Description;
-
-        //        _context.SaveChanges();
-        //    }
-
-        //    return Ok(new { result = $"Отредактированно лот под ID № {lot.Id}" });
-        //}
+        
     }
 }

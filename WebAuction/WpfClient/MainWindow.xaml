@@ -64,7 +64,7 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate >
                 <DataTemplate>
-                    <DockPanel Background="YellowGreen">
+                    <DockPanel x:Name="fon" Background="{Binding Color, UpdateSourceTrigger=PropertyChanged}">
 
                         <Image DockPanel.Dock="Left" Source="{Binding Image}" Height="64" Margin="10" />
                         <Grid Margin="0,10">

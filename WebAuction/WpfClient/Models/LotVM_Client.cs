@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace WpfClient.Models
@@ -13,5 +14,6 @@ namespace WpfClient.Models
         public string Image { get; set; }
         public DateTime End { get; set; }
         public DateTime Begin { get; set; }
+        public System.Windows.Media.Brush Color { get; set; } = System.Windows.Media.Brushes.Green;
     }
 }

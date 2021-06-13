@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -27,9 +28,9 @@ namespace WpfClient
     {
         public int id { get; set; }
 
-        private const string V = "YellowGreen";
+        
         public static string token;
-        public static string actual="Актуально";
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -45,7 +46,7 @@ namespace WpfClient
         public void AsyncDownloadDataCompleted(Object sender, DownloadDataCompletedEventArgs e)
         {
             string result = Encoding.Default.GetString(e.Result);
-            var lots = JsonConvert.DeserializeObject<List<LotVM_Client>>(result);
+            var lots = JsonConvert.DeserializeObject<ObservableCollection<LotVM_Client>>(result);
             dgSimple.ItemsSource = lots;
         }
 
@@ -189,6 +190,8 @@ namespace WpfClient
 
 
                     });
+
+                    
                 if (model.End > DateTime.Now)
                 {
                     if (int.Parse(tbNewPrise.Text) > model.Prise)
@@ -215,8 +218,9 @@ namespace WpfClient
                     }
                     else
                     {
+                        
                         MessageBox.Show("Лот деактивирован.");
-                       
+                        model.Color = System.Windows.Media.Brushes.Red;
                         string json1 = JsonConvert.SerializeObject(new
                         {
                             Id = model.Id,
@@ -263,79 +267,6 @@ namespace WpfClient
 
         }
 
-        public async Task<bool> Rate()
-        {
-            //if (!string.IsNullOrEmpty(New_FileName))
-            //{
-            //    var extension = System.IO.Path.GetExtension(New_FileName);
-            //    var imageName = System.IO.Path.GetRandomFileName() + extension;
-            //    var dir = Directory.GetCurrentDirectory();
-            //    var saveDir = System.IO.Path.Combine(dir, "foto");
-            //    if (!Directory.Exists(saveDir))
-            //        Directory.CreateDirectory(saveDir);
-
-            //    var fileSave = System.IO.Path.Combine(saveDir, imageName);
-            //    File.Copy(New_FileName, fileSave);
-            //    foto = fileSave;
-            //}
-            LotVM_Client model = dgSimple.SelectedItem as LotVM_Client;
-            // отправляем запрос по вебу
-            WebRequest request = WebRequest.Create(UriConstant.Rate);
-            // метод
-            request.Method = "PUT";
-
-            // тип даных
-            request.ContentType = "application/json";
-            request.PreAuthenticate = true;//тест при авторизации
-            request.Headers.Add("Authorization", $"Bearer {MainWindow.token}");
-            // формируется запрос и отправляються в масив с кодировкой
-            
-            string json = JsonConvert.SerializeObject(new
-            {
-                //Id = model.Id,
-                Id = model.Id,
-                //Name = model.Name,
-                //End = model.End,
-                //Description = model.Description,
-                Prise = int.Parse(tbNewPrise.Text),
-                //Image=model.Image
-                
-
-            });
-
-            byte[] byteArray = Encoding.UTF8.GetBytes(json);
-
-            using (Stream stream = await request.GetRequestStreamAsync())
-            {
-                stream.Write(byteArray, 0, byteArray.Length);
-            }
-            try
-            {
-                await request.GetResponseAsync();
-                return true;
-            }
-
-            catch (WebException e)
-            {
-                using WebResponse response = e.Response;
-                HttpWebResponse httpResponse = (HttpWebResponse)response;
-                //MessageBox.Show("Error code: " + httpResponse.StatusCode);
-                using Stream data = response.GetResponseStream();
-                using var reader = new StreamReader(data);
-
-                string text = reader.ReadToEnd();
-                var errors = JsonConvert.DeserializeObject<AddLotValid>(text);
-                //MessageBox.Show(text);
-
-               
-                return false;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message); return false;
-            }
-
-        }
+        
     }
 }
